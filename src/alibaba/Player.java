@@ -67,13 +67,14 @@ public class Player {
 	List<String> CommandMetronoms;
 	List<String> CommandSongs;
 	List<String> CommandScores;
+	// holds song's name and its concised motherevents
 	Map<String,String> songHistory=new HashMap<String,String>();
-    public class Event {String name; List<String> command; String[] ocasion; int number=0; 
-    public CodeEvent e= new CodeEvent(){ public void event(Player p,String mother){//System.out.println(" I AM AN EVENT MY MOTHER IS " + mother);
+    public class PlayerEvent {String name; List<String> command; String[] ocasion; int number=0; 
+    public CodeEvent codeEvent= new CodeEvent(){ public void run(Player p,String mother){//System.out.println(" I AM AN EVENT MY MOTHER IS " + mother);
     } };
-    public void setCodeEvent(CodeEvent e) {this.e=e;};
+    public void setCodeEvent(CodeEvent e) {this.codeEvent=e;};
     }
-	Map<String,Event>	Events=new HashMap<String,Event>();
+	Map<String,PlayerEvent>	playerEvents=new HashMap<String,PlayerEvent>();
 	int sDefault=0;
 	String lastDefault="";
 	private Map<String,Filter> filterMap=new HashMap<String,Filter>();
@@ -156,7 +157,8 @@ public class Player {
 		for (String s:commandMetronoms){
 			String[] Code=s.split("\\s+");
 			if (Code[0].equals("NEW")) {
-				Metronom m=new Metronom(ac,this, Code[1], Float.parseFloat(Code[2]));
+				Metronom m=new Metronom(ac, Code[1], Float.parseFloat(Code[2]));
+				m.setPlayer(this);
 				metroMap.put(m.getName(), m);	
 				System.out.println("NAME:" + m.getName() + " Tempo:" + metroMap.get(m.getName()).tempo);
 			}
@@ -180,12 +182,14 @@ public class Player {
 		switch (Code[0]){
 		case "NEW":
 			if (Code[1].equals("DEFAULT")) {sDefault++;lastDefault="default"+sDefault;Code[1]=lastDefault;}
-			
+			// this would eventually be the metronom name for the new song
 			String metronamep;
+			// if the song is not direct child of a metronom, Mother==""
 			if (!Mother.equals("")){
 			if (metroMap.containsKey(Mother)) metronamep=Mother;
 			else metronamep=songMap.get(Mother).timerName;
-			System.out.println(metroMap.get(metronamep).c.getCount()+": "+MotherEvent.split("#")[0]+"#"+line+": "+st);}
+			//System.out.println(metroMap.get(metronamep).c.getCount()+": "+MotherEvent.split("#")[0]+"#"+line+": "+st);
+			}
 			activeEvents.add(MotherEvent.split("#")[0]);
 			Gain gOut=new Gain (ac,1,(float) 0.3);
 			Gain gIn=new Gain (ac,1,(float) 1.0);
@@ -200,14 +204,14 @@ public class Player {
 	    ///////////
 			MasterGain.addInput(gOut);
 			
-			Song s=new Song(Code[1],scoreMap.get(Code[2]),Code[3], ps);
+			Song s=new Song(Code[1],scoreMap.get(Code[2]),instMap.get(Code[3]), ps);
 			s.setInstMap(instMap);
 			s.setMother(Mother);
 			s.MotherEvent=MotherEvent.split("#")[0]+"#"+line;
 			for (int i=1;i<MotherEvent.split("#").length;i++) s.MotherEvent+="#"+MotherEvent.split("#")[i];
 			s.MotherEvent=concise(s.MotherEvent);
 			songHistory.put(Code[1], s.MotherEvent);
-			System.out.println(s.MotherEvent);
+			System.out.println("s . Mother Event: "+s.MotherEvent);
 			songMap.put(s.getName(), s);
 			Gtree.g.addVertex(Code[1]);
 			 System.out.println("Vertex Count:"+ Gtree.g.getVertexCount());
@@ -297,47 +301,47 @@ public class Player {
 			break;
 		case "SONGEVENT":
 			if (Code[1].equals("DEFAULT")) Code[1]=lastDefault;
-			Event e=new Event();
+			PlayerEvent e=new PlayerEvent();
 			e.name=Code[3];
-			if (Events.containsKey(e.name)) {
-				Events.get(e.name).ocasion=new String[Code.length];
-			System.arraycopy( Code, 0, Events.get(e.name).ocasion, 0, Code.length );
+			if (playerEvents.containsKey(e.name)) {
+				playerEvents.get(e.name).ocasion=new String[Code.length];
+			System.arraycopy( Code, 0, playerEvents.get(e.name).ocasion, 0, Code.length );
 			//System.out.println(e.name + " Updated");
 			}
 			else { 
 				e.ocasion=new String[Code.length];
 				System.arraycopy( Code, 0, e.ocasion, 0, Code.length );
-				Events.put(e.name, e); System.out.println(e.name + " Added");}
+				playerEvents.put(e.name, e); System.out.println(e.name + " Added");}
 			String ss=MotherEvent.split("#")[0]+"#"+line;
 			for (int i=1;i<MotherEvent.split("#").length;i++) ss+="#"+MotherEvent.split("#")[i];
 			ss=concise(ss);
 		//	System.out.println(ss);
 			if (Code.length>5) {
 				if (Code[5].equals("ONCE")) 
-					songMap.get(Code[1]).EVENTS.put(Code[2]+"#"+Code[4]+"#"+"ONCE#"+ss, e.name);} 
+					songMap.get(Code[1]).songEvents.put(Code[2]+"#"+Code[4]+"#"+"ONCE#"+ss, e.name);} 
 			else
 				{
-			if (Code.length>4) songMap.get(Code[1]).EVENTS.put(Code[2]+"#"+Code[4]+"#"+ss, e.name);
+			if (Code.length>4) songMap.get(Code[1]).songEvents.put(Code[2]+"#"+Code[4]+"#"+ss, e.name);
 			
-			else songMap.get(Code[1]).EVENTS.put(Code[2]+"#"+ss, e.name);}
+			else songMap.get(Code[1]).songEvents.put(Code[2]+"#"+ss, e.name);}
 			break;
 		case "METROEVENT":
 			if (Code[2].equals("DEFAULT")) {sDefault++;lastDefault="default"+sDefault;Code[2]=lastDefault;}
-			 e=new Event();
+			 e=new PlayerEvent();
 			e.name=Code[3];
 			
 			
 			metroMap.get(Code[1]).addEvent(Code[2],Code[3],Code[4],Code[5]);
 			
-			if (Events.containsKey(e.name)) {
-				Events.get(e.name).ocasion=new String[Code.length];
-			System.arraycopy( Code, 0, Events.get(e.name).ocasion, 0, Code.length );
+			if (playerEvents.containsKey(e.name)) {
+				playerEvents.get(e.name).ocasion=new String[Code.length];
+			System.arraycopy( Code, 0, playerEvents.get(e.name).ocasion, 0, Code.length );
 			//System.out.println(e.name + " Updated");
 			}
 			else { 
 				e.ocasion=new String[Code.length];
 				System.arraycopy( Code, 0, e.ocasion, 0, Code.length );
-				Events.put(e.name, e); System.out.println(e.name + " Added");}
+				playerEvents.put(e.name, e); System.out.println(e.name + " Added");}
 			 break;
 		case "ACTUALIZE":
 			double r=Math.random();
@@ -351,9 +355,9 @@ public class Player {
 				String ssp=MotherEvent.split("#")[0]+"#"+line;
 				for (int i=1;i<MotherEvent.split("#").length;i++) ssp+="#"+MotherEvent.split("#")[i];
 				//System.out.println(ss);
-				G.g.addEdge(MotherEvent.split("#")[0]+","+Events.get(Code[1]).name,MotherEvent.split("#")[0],Events.get(Code[1]).name);
-		   setCommandSongs(Events.get(Code[1]).command,Mother,Events.get(Code[1]).name+"#"+ssp);
-		   Events.get(Code[1]).e.event(this, Mother);
+				G.g.addEdge(MotherEvent.split("#")[0]+","+playerEvents.get(Code[1]).name,MotherEvent.split("#")[0],playerEvents.get(Code[1]).name);
+		   setCommandSongs(playerEvents.get(Code[1]).command,Mother,playerEvents.get(Code[1]).name+"#"+ssp);
+		   playerEvents.get(Code[1]).codeEvent.run(this, Mother);
 		   }
 			break;
 		case "KILL":
@@ -404,7 +408,7 @@ public class Player {
 	public void start() {
 		// TODO Auto-generated method stub
 		ac.out.addInput(MasterGain);
-		ac.start();
+		ac.start(); 
 		for (String s: metroMap.keySet()) metroMap.get(s).start();
 	//	metroMap.get("metro2").start();
 	}
@@ -464,7 +468,7 @@ public class Player {
 				case "#EVENT":
 					command.clear();
 					line=reader.readLine();
-					Event e=new Event();
+					PlayerEvent e=new PlayerEvent();
 					e.name=line.trim();
 					e.number=eventCount;
 					eventCount++;
@@ -474,10 +478,10 @@ public class Player {
 					for (String s:command) System.out.println(s);
 					
 					
-					if (Events.containsKey(e.name)) {
-						Events.get(e.name).command=new ArrayList<>(command); //System.out.println(e.name + " Updated");
+					if (playerEvents.containsKey(e.name)) {
+						playerEvents.get(e.name).command=new ArrayList<>(command); //System.out.println(e.name + " Updated");
 						}
-					else { e.command=new ArrayList<>(command);Events.put(e.name, e); System.out.println(e.name + " Added");}
+					else { e.command=new ArrayList<>(command);playerEvents.put(e.name, e); System.out.println(e.name + " Added");}
 					break;
 				default:
 					if (line!=null) line=reader.readLine();
@@ -555,7 +559,7 @@ public class Player {
 	public setlength length;
 	private void setUplabels() {
 		for (int i=0;i<eventCount;i++){
-			for (String s:Events.keySet()){ if (Events.get(s).number==i){
+			for (String s:playerEvents.keySet()){ if (playerEvents.get(s).number==i){
 				G.g.addVertex(s);
 				Transformer<String,Paint> vertexPaint = new Transformer<String,Paint>() {
 					 public Paint transform(String s) {
@@ -563,11 +567,11 @@ public class Player {
 					 }};
 					 G.vv.getRenderContext().setVertexFillPaintTransformer(new setcolor());
 					Gtree.draw();
-				JLabel lblThisIsA = new JLabel(Events.get(s).name);
+				JLabel lblThisIsA = new JLabel(playerEvents.get(s).name);
 		//	    lblThisIsA.setForeground(Color.RED);
 			    lblThisIsA.setFont(new Font("Tahoma", Font.BOLD, 11));
 			   // alibaba.AlibabaPlayer.test(lblThisIsA);
-			    labelMap.put(Events.get(s).name, lblThisIsA);
+			    labelMap.put(playerEvents.get(s).name, lblThisIsA);
 			    alibaba.AlibabaPlayer.panel.add(lblThisIsA);
 			  //  labelMap.get("loop1_1").setForeground(Color.RED);
 			    alibaba.AlibabaPlayer.frame.validate();
@@ -608,14 +612,14 @@ public class Player {
 			
 		} */
 		 Pattern p=Pattern.compile("ONEND([\\w\\W]*)");
-		 for (String S:songMap.get(name).EVENTS.keySet()){
-		 Matcher mtch=p.matcher(S);
+		 for (String songEventKey:songMap.get(name).songEvents.keySet()){
+		 Matcher mtch=p.matcher(songEventKey);
 		 if (mtch.matches()){
 			 boolean dont=false;
 //			 if (Events.get(songMap.get(name).EVENTS.get("ONEND")).ocasion.length==5)
-			 Event e;
+			 PlayerEvent playerEventOnTheEndOfSong;
 			// Hash
-			 e=Events.get(songMap.get(name).EVENTS.get(S));
+			 playerEventOnTheEndOfSong=playerEvents.get(songMap.get(name).songEvents.get(songEventKey));
 			 String[] cc=mtch.group(1).split("#");
 			 
 			 
@@ -623,43 +627,46 @@ public class Player {
 			  // System.out.println("Probability of action:" + rand);
 			   if (Math.random()> rand) dont=true;
 			   int once=0;
+			   // the rather absurd structure I used here , songEventKey=ONEND#probability#ONCE[?]#generating event name# generating line
+			   // therefore cc[2+once] is the generating event's name. 
 			   if (cc[2].equals("ONCE")){
 				   once=1;
-			 for (String sss:songMap.keySet()){ 
-				 System.out.println(sss+"   "+songMap.get(sss).MotherEvent+ " "+name);
-				if (!sss.equals(name)) if (songMap.get(sss).MotherEvent.contains(cc[3]+"#"+cc[4]))
-			 
+			 for (String playingSong:songMap.keySet()){ 
+				 System.out.println(playingSong+"   "+songMap.get(playingSong).MotherEvent+ " "+name);
+				 
+				if (!playingSong.equals(name)) if (songMap.get(playingSong).MotherEvent.contains(cc[3]+"#"+cc[4]))
+			      //that is the event name and line of the generating command
 					 {dont=true;}}}
 				if (!dont) {
-					System.out.println(metroMap.get(songMap.get(name).timerName).c.getCount()+":"+songMap.get(name).MotherEvent.split("#")[0]+": Going to run "+e.name);
+					System.out.println(metroMap.get(songMap.get(name).timerName).c.getCount()+":"+songMap.get(name).MotherEvent.split("#")[0]+": Going to run "+playerEventOnTheEndOfSong.name);
 					//if (e.name.equals("event7"))
 					//{System.out.println("event7!!!");}
 					String s="";
 					for (int i=2+once;i<cc.length;i++) s+="#"+cc[i];
 				//	System.out.println(s);
-					G.g.addEdge(cc[2+once]+","+e.name,cc[2+once], e.name);
+					G.g.addEdge(cc[2+once]+","+playerEventOnTheEndOfSong.name,cc[2+once], playerEventOnTheEndOfSong.name);
 					//G.vv.repaint();
-					System.out.println("EDGE:" + cc[2 + once] + "," + e.name);
+					System.out.println("EDGE:" + cc[2 + once] + "," + playerEventOnTheEndOfSong.name);
 					//G.layout.initialize();
-					setCommandSongs(e.command,name,e.name +s
+					setCommandSongs(playerEventOnTheEndOfSong.command,name,playerEventOnTheEndOfSong.name +s
 							);
-				e.e.event(this,name);
+				playerEventOnTheEndOfSong.codeEvent.run(this,name);
 			 
 		 }
 				else{
 					String S2="OTHERWISE"+cc[0];
 			//		if (songMap.get(name).EVENTS.containsKey(S2))
-					for (String ss:songMap.get(name).EVENTS.keySet())	
+					for (String ss:songMap.get(name).songEvents.keySet())	
 						if (ss.split("#")[0].equals(S2))
-					{e=Events.get(songMap.get(name).EVENTS.get(ss));
-					System.out.println(metroMap.get(songMap.get(name).timerName).c.getCount()+":"+songMap.get(name).MotherEvent.split("#")[0]+"Going to run "+e.name);
+					{playerEventOnTheEndOfSong=playerEvents.get(songMap.get(name).songEvents.get(ss));
+					System.out.println(metroMap.get(songMap.get(name).timerName).c.getCount()+":"+songMap.get(name).MotherEvent.split("#")[0]+"Going to run "+playerEventOnTheEndOfSong.name);
 					String s="";
 					cc=ss.split("#");
 					for (int i=1;i<cc.length;i++) s+="#"+cc[i];
 					//System.out.println(s);	
-					G.g.addEdge(cc[2+once]+","+e.name,cc[1], e.name);
-					setCommandSongs(e.command,name,e.name+s);
-					e.e.event(this,name);}
+					G.g.addEdge(cc[2+once]+","+playerEventOnTheEndOfSong.name,cc[1], playerEventOnTheEndOfSong.name);
+					setCommandSongs(playerEventOnTheEndOfSong.command,name,playerEventOnTheEndOfSong.name+s);
+					playerEventOnTheEndOfSong.codeEvent.run(this,name);}
 				}
 		 
 		 }}
@@ -691,7 +698,7 @@ public class Player {
 		
 	}
 	public void addCodeEvent(String string, CodeEvent codeEvent) {
-		Events.get(string).setCodeEvent(codeEvent);
+		playerEvents.get(string).setCodeEvent(codeEvent);
 		
 	}
 	public PlaySet lastDefaultSongPs() {
@@ -729,7 +736,7 @@ public class Player {
 		//updateLabels(eventlist);
 		return eventlist;
 	}
-	public void updateLabels(List<String> eventlist){for (String s:Events.keySet()) if (eventlist.contains(s)) labelMap.get(s).setForeground(Color.red); else
+	public void updateLabels(List<String> eventlist){for (String s:playerEvents.keySet()) if (eventlist.contains(s)) labelMap.get(s).setForeground(Color.red); else
 		labelMap.get(s).setForeground(Color.black);}
 
 }

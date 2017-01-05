@@ -86,14 +86,14 @@ public class shsho8 {
 		//LPRezFilter lpr=new LPRezFilter(p.ac, 800, (float) 0.9);
 		//lpr.addInput(ps.gIn);
 	//	ps.gOut.addInput(lpr);
-		p.addCodeEvent("event3", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event3", new CodeEvent(){public void run(Player p,String Mother){
 			//p.lastDefaultSongPs().gOut.clearInputConnections();
 			p.lastDefaultSongPs().newGlide("echodelay", alibaba.AlibabaPlayer.echodelayGl);
 			p.lastDefaultSongPs().newGlide("echogain", alibaba.AlibabaPlayer.echovolumeGl);
 			//echo.filter(p.ac,p.lastDefaultSongPs());
 			
 		}});
-		p.addCodeEvent("event4", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event4", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.3);
 			//p.lastDefaultSongPs().gOut.clearInputConnections();
 			p.lastDefaultSongPs().addTogle("disttogle",alibaba.AlibabaPlayer.togl);
@@ -102,27 +102,27 @@ public class shsho8 {
 			//wshaper.filter(p.ac,p.lastDefaultSongPs());
 			
 		}});
-		p.addCodeEvent("event6", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event6", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.3);
 			
 			
 		}});
-		p.addCodeEvent("event9", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event9", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.1);
 			
 			
 		}});
-		p.addCodeEvent("event10", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event10", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.1);
 			
 			
 		}});
-		p.addCodeEvent("event11", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event11", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.1);
 			
 			
 		}});
-		p.addCodeEvent("event5", new CodeEvent(){public void event(Player p,String Mother){
+		p.addCodeEvent("event5", new CodeEvent(){public void run(Player p,String Mother){
 			p.lastDefaultSongPs().gOut.setGain((float) 0.3);
 			//p.lastDefaultSongPs().gOut.clearInputConnections();
 			p.lastDefaultSongPs().addTogle("disttogle",alibaba.AlibabaPlayer.togl);

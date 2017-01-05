@@ -30,19 +30,19 @@ int offSetBeat;
 float offSetTime;
 
 Song s;
-
-public class event {
+Player player=null;
+public class MetroEvent {
 	 boolean periodic=true; int period=8; int offset=0; 
-String name; String event;
+String name; String playerEvent;
  float probability;
-event(){}
+MetroEvent(){}
 } 
 
 Map<String,Song> SongMap=new HashMap<String,Song>();
-Map<String,event> MetroEvent=new HashMap<String,event>();
+Map<String,MetroEvent> metroEvents=new HashMap<String,MetroEvent>();
+public void setPlayer(Player player){ this.player=player; }
 
-
-public Metronom(AudioContext ac, Player player, String name, float tempo) {
+public Metronom(AudioContext ac,String name, float tempo) {
 	super();
 	this.ac = ac;
 	this.name = name;
@@ -62,22 +62,22 @@ public Metronom(AudioContext ac, Player player, String name, float tempo) {
 	c.addMessageListener(new Bead(){
 		  public void messageReceived(Bead message) {
 		        Clock c = (Clock)message;
-		        if(c.isBeat())//  AlibabaPlayer.tik(inst1);
+		        if(c.isBeat()&&player!=null)//  AlibabaPlayer.tik(inst1);
 		        {	//System.out.println("Metronom "+name+" "+c.getBeatCount());
 		      //  System.out.print("All Songs are:");
 		      //  printAllSongs();
 		        //	System.out.println(name);
-		        for (event me: MetroEvent.values()){
-		        	if (me.periodic) {if (c.getBeatCount()%me.period == me.offset) {System.out.println("METRONOM " + name + " SAIS " + me.event+ " "+c.getBeatCount());
-		        	 player.setCommandSongs(player.Events.get(me.event).command, name,player.Events.get(me.event).name);
+		        for (MetroEvent me: metroEvents.values()){
+		        	if (me.periodic) {if (c.getBeatCount()%me.period == me.offset) {System.out.println("METRONOM " + name + " SAIS " + me.playerEvent+ " "+c.getBeatCount());
+		        	 player.setCommandSongs(player.playerEvents.get(me.playerEvent).command, name,player.playerEvents.get(me.playerEvent).name);
 		       
 		        	
-		        	 player.Events.get(me.event).e.event(player,name);
+		        	 player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
 		        	}
 		        	}
 		        	else if (c.getBeatCount()==me.offset)	{//System.out.println("METRONOM " + name + " SAIS " + me.event+" ONCE AND FOR ALL"+ " "+c.getBeatCount());	
-		        	player.setCommandSongs(player.Events.get(me.event).command, name,player.Events.get(me.event).name);
-		        	player.Events.get(me.event).e.event(player,name);
+		        	player.setCommandSongs(player.playerEvents.get(me.playerEvent).command, name,player.playerEvents.get(me.playerEvent).name);
+		        	player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
 		        	}
 		        }	
 		        //	player.setCommandSongs(commandSongs, name);
@@ -106,9 +106,9 @@ public Metronom(AudioContext ac, Player player, String name, float tempo) {
 void start(){c.start();}
 void stop(){c.pause(true);}
 void addEvent(String code2, String code3, String code4, String code5){
-	event em=new event();
+	MetroEvent em=new MetroEvent();
 	em.name=code2;
-	em.event=code3;
+	em.playerEvent=code3;
 	em.probability= Float.parseFloat(code5)/(float)100.0;
 	Pattern p;
 	Matcher m;
@@ -118,7 +118,7 @@ void addEvent(String code2, String code3, String code4, String code5){
 	 em.periodic=true; em.period=Integer.parseInt(m.group(2)); em.offset=Integer.parseInt(m.group(1));} else {
 		 em.periodic=false; em.offset=Integer.parseInt(code4);// System.out.println("METRO NON PERIODIC "+em.offset);
 	 }
-MetroEvent.put(em.name, em);
+metroEvents.put(em.name, em);
 	
 }
 void addSong(Song S){

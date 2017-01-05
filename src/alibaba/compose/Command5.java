@@ -41,28 +41,28 @@ public class Command5 {
 		p.fromFile("command5.baba");
 		/////Code Events
 		p.addCodeEvent("eventbasic", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 			//	if (Mother.equals("metro1")) p.lastDefaultSongPs().newGlide("tone", ps.get("tone"));
 				 p.SongPs("tempobaba").gOut.setGain((float)0.05);	
 					}});
 		
 		p.addCodeEvent("event2", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 				if (Mother.equals("metro1")) p.lastDefaultSongPs().newGlide("tone", ps.getGlide("tone"));
 				
 					}}
 	                );
 		p.addCodeEvent("event1", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 				if (Mother.equals("metro1")) p.lastDefaultSongPs().gOut.setGain((float) 0.05);
 				
 					}}
 	                );
 		p.addCodeEvent("event4", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 				 
 				 float shift=(float) (Math.floor(Math.random()*12)/12);
@@ -72,7 +72,7 @@ public class Command5 {
 					}}
 	                );
 		p.addCodeEvent("event5", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 				 
 				 System.out.println(" I AM EVENT 5");

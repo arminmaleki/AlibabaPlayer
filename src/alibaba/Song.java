@@ -12,13 +12,13 @@ public class Song {
 	String name="";
 	note n;
 	Map<String, Synth> instMap;
-	String CurrentInstrument;
+	Synth CurrentInstrument;
 	Score scr;
 	String MotherEvent="";
 	float maxTime=0;
 	float songTime=0;
 	boolean INSTRUMENT_VARIABLE=false;
-	public Map<String,String> EVENTS=new HashMap<String,String>();
+	public Map<String,String> songEvents=new HashMap<String,String>();
 	public void setScore(Score scr){
 		this.scr=scr;
 		for (note n:scr.noteList) {
@@ -37,7 +37,7 @@ public class Song {
 	 float pitchShift=0;
 	public String Mother;
 	public PlaySet ps;
-	public Song(String name,Score scr,String CurrentInstrument,PlaySet ps) {
+	public Song(String name,Score scr,Synth CurrentInstrument,PlaySet ps) {
 		super();
 		this.name = name;
 		this.CurrentInstrument=CurrentInstrument;
@@ -68,7 +68,7 @@ public class Song {
 			//   System.out.println("is playing:   "+name+ " " +Mother);
 				if ((!INSTRUMENT_VARIABLE)||(!instMap.containsKey(n2.inst))) 
 					
-					instMap.get(CurrentInstrument).play(n2,tempo,ps); 
+				CurrentInstrument.play(n2,tempo,ps); 
 				else {instMap.get(n2.inst).play(n2,tempo,ps); System.out.println("inst orig");}
 			//	System.out.println("reporting " + name);
 			//	for (String s:ps.glMap.keySet()) System.out.print("Glides: "+s+" ");

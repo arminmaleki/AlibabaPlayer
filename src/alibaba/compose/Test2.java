@@ -59,7 +59,7 @@ public class Test2 {
 		p.fromFile("test2.baba");
 		/////Code Events
 		p.addCodeEvent("event3", new CodeEvent(){
-			public void event(Player p,String Mother){
+			public void run(Player p,String Mother){
 				
 				if (Mother.equals("metro1")) {p.lastDefaultSongPs().newGlide("tone", ps.getGlide("tone"));
 				p.lastDefaultSongPs().gOut.clearInputConnections();

@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-
+import alibaba.synth.Synth;
 import alibaba.synth.Synth1;
 import alibaba.synth.instrument1;
 import alibaba.synth.percussion;
@@ -146,7 +146,7 @@ public  static Glide vibGl=new Glide(ac, (float) 0.025, 30);;
 	    		Synth S=new Synth1("inst1", ac, (float) 0.01, 20);
 	    		p.instMap.put("inst1", S);*/
 	    		// p=new Player(ac, MasterGain);
-	    		
+	    		/*
 	    		p.setCommandInstruments("instc SYNTH1 0.01 100");
 	    		p.setCommandScores("alibabac alibaba.scr");
 	    		p.setCommandMetronoms("NEW metroc 180");
@@ -155,7 +155,18 @@ public  static Glide vibGl=new Glide(ac, (float) 0.025, 30);;
 	    		p.setCommandSongs("REPEAT DEFAULT TRUE", "");
 	    		//p.lastDefaultSongPs().newGlide("tone", toneGl);
 	    		p.lastDefaultSongPs().gOut.setGain(volumeGl);
-	    		p.start();
+	    		p.start();*/
+	    		AudioContext ac= new AudioContext();
+	    		Synth inst=new Synth1("inst",ac, 0.01f,100f);
+	    		Score sc=new Score("alibaba", "alibaba.scr");
+	    		Song s=new Song("alibaba1",sc,inst, new PlaySet(ac,0.3f));
+	    		//s.repeat=true;
+	    		Metronom m=new Metronom(ac, "metro1", 180);
+	    		m.addSong(s);
+	    		ac.out.addInput(s.ps.gOut);
+	    		ac.start();
+	    		m.start();
+				
 	    	}
 	    });
 	    btnCode.setBounds(35, 68, 89, 23);
