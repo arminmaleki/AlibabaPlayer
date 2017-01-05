@@ -1,0 +1,16 @@
+#INSTRUMENTS
+inst1 SYNTH1 0.1
+inst12 SYNTH1 0.5
+I1 SYNTH1 0.0
+P1 PERCUSSION
+#SCORES
+alibaba alibaba.scr
+rythm1 rythm1.scr
+#METRONOMS
+NEW metro1 90
+#SONGS
+NEW rythm rythm1 P1
+REPEAT rythm TRUE
+METRONOM rythm metro1
+#
+

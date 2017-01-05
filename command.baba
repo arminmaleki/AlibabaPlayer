@@ -1,0 +1,23 @@
+#INSTRUMENTS
+inst1 SYNTH1 0.1
+inst12 SYNTH1 0.5
+I1 SYNTH1 0.0
+#SCORES
+alibaba alibaba.scr
+#METRONOMS
+NEW metro1 60
+NEW metro2 60
+#SONGS
+NEW song1 alibaba inst1 
+NEW song2 alibaba inst12 
+REPEAT song1 TRUE
+OFFSET song2 2 BAR
+PITCH song2 7
+METRONOM song1 metro1
+METRONOM song2 metro2
+NEW DEFAULT alibaba inst13
+OFFSET DEFAULT 4 BAR
+PITCH DEFAULT 7
+SELFINST DEFAULT FALSE
+#
+

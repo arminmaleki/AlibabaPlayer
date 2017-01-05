@@ -1,0 +1,45 @@
+#INSTRUMENTS
+inst1 SYNTH1 0.01 100
+inst12 SYNTH1 0.025 20
+I1 SYNTH1 0.0 0
+P1 PERCUSSION
+#SCORES
+alibaba alibaba.scr
+rythm1 rythm1.scr
+arpeggio arpeggio.scr
+#METRONOMS
+NEW metro1 80
+NEW metro2 70
+#SONGS
+METROEVENT metro1 DEFAULT event2 0%8 100
+METROEVENT metro2 DEFAULT event2 0%8 100
+METROEVENT metro1 DEFAULT eventbasic 0 100
+#EVENT
+eventbasic
+NEW tempobaba rythm1 P1
+METRONOM tempobaba metro1
+REPEAT tempobaba TRUE
+#EVENT
+event2
+NEW DEFAULT arpeggio inst1
+METRONOM DEFAULT MOTHER
+SONGEVENT DEFAULT ONEND event4 80 ONCE
+KILL QUERY event2#3 20
+ACTUALIZE event5 45 
+#EVENT
+event5
+#EVENT
+event1
+NEW DEFAULT rythm1 P1
+METRONOM DEFAULT metro1
+#EVENT 
+event3
+NEW DEFAULT alibaba inst12
+METRONOM DEFAULT MOTHER
+#EVENT
+event4
+NEW DEFAULT alibaba inst1
+METRONOM DEFAULT MOTHER
+GAIN QUERY event2#1 1.0
+
+
