@@ -16,18 +16,18 @@ public class shsho8 {
 
 	public static void play(Player p, PlaySet ps) {
 		////Filters
-		Filter lowpass=new Filter(){public void filter(AudioContext ac,PlaySet ps){
+		Filter lowpass=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
 			//  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
-			  LPRezFilter lpr=new LPRezFilter(ac,ps.get("lprfreq"),(float) 0.99);
+			  LPRezFilter lpr=new LPRezFilter(ac,ps.getGlide("lprfreq"),(float) 0.99);
 			lpr.addInput(ps.gIn);
 			ps.gOut.addInput(lpr);
 			
 		}};
-		Filter echo=new Filter(){public void filter(AudioContext ac,PlaySet ps){
-			  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
+		Filter echo=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
+			  Gain delayGain=new Gain(ac,1,ps.getGlide("echogain"));
 			 
 			   TapIn ti=new TapIn(ac,2000);
-				TapOut to=new TapOut(ac,ti,ps.get("echodelay"));
+				TapOut to=new TapOut(ac,ti,ps.getGlide("echodelay"));
 		
 			ti.addInput(ps.gIn);
 			  delayGain.addInput(to);
@@ -37,7 +37,7 @@ public class shsho8 {
 			
 			
 		}};
-		Filter wshaper=new Filter(){public void filter(AudioContext ac,PlaySet ps){
+		Filter wshaper=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
 			//  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
 			 
 			//   TapIn ti=new TapIn(ac,2000);
@@ -50,7 +50,7 @@ public class shsho8 {
 		WaveShaper ws=new WaveShaper(ac,WaveShape);
 			ws.addInput(ps.gIn);
 		//ps.gOut.addInput(ps.gIn);
-			  LPRezFilter lpr=new LPRezFilter(ac,ps.get("lprfreq"),(float) 0.98);
+			  LPRezFilter lpr=new LPRezFilter(ac,ps.getGlide("lprfreq"),(float) 0.98);
 				lpr.addInput(ws);
 				ps.gOut.addInput(lpr);
 			ps.gOut.addInput(ws);
@@ -137,7 +137,7 @@ public class shsho8 {
 		ps.newGlide("lprfreq", alibaba.AlibabaPlayer.lowpass);
 	//	ps.addTogle("disttogle",alibaba.AlibabaPlayer.togl);
 	//	Filters.addFilters(p.ac, echo, wshaper, ps);
-		lowpass.filter(p.ac, ps);
+		lowpass.applyToPlaySet(p.ac, ps);
 		ps.gOut.addInput(ps.gIn);
 		
 	}

@@ -34,13 +34,13 @@ public class Synth2 implements Synth {
 //    	   switch (s) {case "vibration": vibGl=ps.glMap.get(s); break;case "tone": toneGl=ps.glMap.get(s); break;}
 		Glide toneGl;
 		Glide vibGl;
-if (ps.get("vibration")!=null) {
-	vibGl=ps.get("vibration"); 
+if (ps.getGlide("vibration")!=null) {
+	vibGl=ps.getGlide("vibration"); 
 	//System.out.println("there is a vibration Glide set");
 	}else 
 		vibGl=new Glide(ac,(float) -1,1000);
 float dummy=vibGl.getValue();
-if (ps.get("tone")!=null) toneGl=ps.get("tone"); else toneGl=new Glide(ac,0,1000);
+if (ps.getGlide("tone")!=null) toneGl=ps.getGlide("tone"); else toneGl=new Glide(ac,0,1000);
        WavePlayer vwp=new WavePlayer(ac,(float)8.0,Buffer.SAW);
       // WavePlayer vwp2=new WavePlayer(ac,(float)11.0,Buffer.SAW);
        vhash.put(""+vwp.hashCode(), ""+(float)(440*Math.exp(N.pitch*Math.log(2)/12)));

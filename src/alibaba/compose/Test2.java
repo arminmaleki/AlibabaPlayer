@@ -15,18 +15,18 @@ public class Test2 {
 
 	public static void play(Player p, PlaySet ps) {
 		////Filters
-		Filter lowpass=new Filter(){public void filter(AudioContext ac,PlaySet ps){
-			  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
-			  LPRezFilter lpr=new LPRezFilter(ac,ps.get("lprfreq"),(float) 0.98);
+		Filter lowpass=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
+			  Gain delayGain=new Gain(ac,1,ps.getGlide("echogain"));
+			  LPRezFilter lpr=new LPRezFilter(ac,ps.getGlide("lprfreq"),(float) 0.98);
 			lpr.addInput(ps.gIn);
 			ps.gOut.addInput(lpr);
 			
 		}};
-		Filter echo=new Filter(){public void filter(AudioContext ac,PlaySet ps){
-			  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
+		Filter echo=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
+			  Gain delayGain=new Gain(ac,1,ps.getGlide("echogain"));
 			 
 			   TapIn ti=new TapIn(ac,2000);
-				TapOut to=new TapOut(ac,ti,ps.get("echodelay"));
+				TapOut to=new TapOut(ac,ti,ps.getGlide("echodelay"));
 		
 			ti.addInput(ps.gIn);
 			  delayGain.addInput(to);
@@ -36,7 +36,7 @@ public class Test2 {
 			
 			
 		}};
-		Filter wshaper=new Filter(){public void filter(AudioContext ac,PlaySet ps){
+		Filter wshaper=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
 			//  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
 			 
 			//   TapIn ti=new TapIn(ac,2000);
@@ -61,18 +61,18 @@ public class Test2 {
 		p.addCodeEvent("event3", new CodeEvent(){
 			public void event(Player p,String Mother){
 				
-				if (Mother.equals("metro1")) {p.lastDefaultSongPs().newGlide("tone", ps.get("tone"));
+				if (Mother.equals("metro1")) {p.lastDefaultSongPs().newGlide("tone", ps.getGlide("tone"));
 				p.lastDefaultSongPs().gOut.clearInputConnections();
 				p.lastDefaultSongPs().newGlide("echodelay", alibaba.AlibabaPlayer.echodelayGl);
 				p.lastDefaultSongPs().newGlide("echogain", alibaba.AlibabaPlayer.echovolumeGl);
-				echo.filter(p.ac,p.lastDefaultSongPs());
+				echo.applyToPlaySet(p.ac,p.lastDefaultSongPs());
 				p.lastDefaultSongPs().gOut.setGain((float) .0);
 				} else {p.lastDefaultSongPs().gOut.setGain((float) 0.0);	
 				p.lastDefaultSongPs().gOut.clearInputConnections();
 				p.lastDefaultSongPs().addTogle("disttogle",alibaba.AlibabaPlayer.togl);
 				p.lastDefaultSongPs().newGlide("vibration", alibaba.AlibabaPlayer.vibGl);
 				
-				wshaper.filter(p.ac,p.lastDefaultSongPs());
+				wshaper.applyToPlaySet(p.ac,p.lastDefaultSongPs());
 				}
 				
 					}}
@@ -83,7 +83,7 @@ public class Test2 {
 		//lpr.addInput(ps.gIn);
 	//	ps.gOut.addInput(lpr);
 		ps.newGlide("lprfreq", alibaba.AlibabaPlayer.lowpass);
-		lowpass.filter(p.ac, ps);
+		lowpass.applyToPlaySet(p.ac, ps);
 	//	ps.gOut.addInput(ps.gIn);
 		
 	}

@@ -10,8 +10,8 @@ public static void addFilters(AudioContext ac,Filter f1,Filter f2,PlaySet ps){
 	Gain g=new Gain(ac,1,1);
 	ps1.gOut=g;
 	ps2.gIn=g;
-	f1.filter(ac, ps1);
-	f2.filter(ac, ps2);
+	f1.applyToPlaySet(ac, ps1);
+	f2.applyToPlaySet(ac, ps2);
 	ps1.gOut.kill();
 	ps2.gIn.kill();
 	g.kill();

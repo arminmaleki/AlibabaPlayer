@@ -10,16 +10,23 @@ import net.beadsproject.beads.ugens.Gain;
 import net.beadsproject.beads.ugens.Glide;
 import net.beadsproject.beads.ugens.TapIn;
 import net.beadsproject.beads.ugens.TapOut;
+/// this is a "class file" which accompanies a .baba file instruction. command5.baba
 
+// it sets up the filters: define them, name and introduce them to a player, and start them
+// with the audio context and the given playset
+
+// it defines "Code Events" for player, that is events which are triggered through the GUI,etc...
+
+// it starts the player with command5.baba
 public class Command5 {
 
 	public static void play(Player p,PlaySet ps) {
 		////Filters
-		Filter echo=new Filter(){public void filter(AudioContext ac,PlaySet ps){
-			  Gain delayGain=new Gain(ac,1,ps.get("echogain"));
+		Filter echo=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
+			  Gain delayGain=new Gain(ac,1,ps.getGlide("echogain"));
 			 
 			   TapIn ti=new TapIn(ac,2000);
-				TapOut to=new TapOut(ac,ti,ps.get("echodelay"));
+				TapOut to=new TapOut(ac,ti,ps.getGlide("echodelay"));
 		
 			ti.addInput(ps.gIn);
 			  delayGain.addInput(to);
@@ -43,7 +50,7 @@ public class Command5 {
 		p.addCodeEvent("event2", new CodeEvent(){
 			public void event(Player p,String Mother){
 				
-				if (Mother.equals("metro1")) p.lastDefaultSongPs().newGlide("tone", ps.get("tone"));
+				if (Mother.equals("metro1")) p.lastDefaultSongPs().newGlide("tone", ps.getGlide("tone"));
 				
 					}}
 	                );
@@ -78,7 +85,7 @@ public class Command5 {
 					}}
 	                );
 		
-		echo.filter(p.ac, ps);
+		echo.applyToPlaySet(p.ac, ps);
 		
 		
 		/*

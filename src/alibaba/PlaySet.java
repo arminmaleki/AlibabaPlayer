@@ -5,7 +5,9 @@ import java.util.Map;
 
 import net.beadsproject.beads.ugens.Gain;
 import net.beadsproject.beads.ugens.Glide;
-
+// A play set is a set of two gains, input and output, and a collection of glides and buttons which
+// Adjust the respective behavior of input and output. 
+// it doesn't do anything by itself except assigning a name to each glide and button.
 public class PlaySet {
     public Gain gIn,gOut;
     public Map<String,Glide> glMap=new HashMap<String,Glide>();
@@ -28,6 +30,6 @@ public class PlaySet {
 		buttonMap.put(string, t);
 		
 	}
-	public Glide get(String string) {if (glMap.containsKey(string)) return glMap.get(string); else return null;}
+	public Glide getGlide(String string) {if (glMap.containsKey(string)) return glMap.get(string); else return null;}
 
 }
