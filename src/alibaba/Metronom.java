@@ -33,12 +33,12 @@ Song s;
 Player player=null;
 public class MetroEvent {
 	 boolean periodic=true; int period=8; int offset=0; 
-String name; String playerEvent;
+String name; CodeEvent codeEvent;//String playerEvent;
  float probability;
 MetroEvent(){}
 } 
 
-Map<String,Song> SongMap=new HashMap<String,Song>();
+List<Song> songList=new ArrayList<Song>();
 Map<String,MetroEvent> metroEvents=new HashMap<String,MetroEvent>();
 public void setPlayer(Player player){ this.player=player; }
 
@@ -67,33 +67,39 @@ public Metronom(AudioContext ac,String name, float tempo) {
 		      //  System.out.print("All Songs are:");
 		      //  printAllSongs();
 		        //	System.out.println(name);
-		        for (MetroEvent me: metroEvents.values()){
+		      /*  for (MetroEvent me: metroEvents.values()){
 		        	if (me.periodic) {if (c.getBeatCount()%me.period == me.offset) {System.out.println("METRONOM " + name + " SAIS " + me.playerEvent+ " "+c.getBeatCount());
 		        	 player.setCommandSongs(player.playerEvents.get(me.playerEvent).command, name,player.playerEvents.get(me.playerEvent).name);
 		       
 		        	
-		        	 player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
+		//        	 player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
 		        	}
 		        	}
 		        	else if (c.getBeatCount()==me.offset)	{//System.out.println("METRONOM " + name + " SAIS " + me.event+" ONCE AND FOR ALL"+ " "+c.getBeatCount());	
 		        	player.setCommandSongs(player.playerEvents.get(me.playerEvent).command, name,player.playerEvents.get(me.playerEvent).name);
-		        	player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
+		 //       	player.playerEvents.get(me.playerEvent).codeEvent.run(player,name);
 		        	}
-		        }	
+		        }	*/
 		        //	player.setCommandSongs(commandSongs, name);
 		    }
 		    // s.update((int)c.getCount());
 		        
-		        List<String> deadNames=new ArrayList<String>();
+		        List<Song> deadNames=new ArrayList<Song>();
 		        
-		        for (Song ss:SongMap.values())
+		        for (Song ss:songList)
 		        if (!ss.update((int)c.getCount(),c.getTempo()))
 		        {//SongMap.remove(ss.name); 
-		         deadNames.add(ss.name);
+		         deadNames.add(ss);
 		        }
-		        for (String S:deadNames){player.endOfSong(S);SongMap.remove(S);}
+		        for (Song S:deadNames){//player.endOfSong(S)
+		        	History h=new History();
+		        	h.lastSong=S;
+		        	h.lastEventName=S.history.lastEventName;
+		        	for(CodeEvent ce:S.songEvents) {ce.run(h);System.out.println("ce.run");}
+		        //SongMap.remove	
+		        songList.remove(S);}
 		        if (deadNames.size()!=0) {
-		        	player.updateLabels(player.updateEvents());
+		        //	player.updateLabels(player.updateEvents());
 		        	//for (String s:player.updateEvents()) System.out.print(s + " "); System.out.println("Metro Done");
 		        	}
 		        
@@ -103,12 +109,12 @@ public Metronom(AudioContext ac,String name, float tempo) {
 	
 	ac.out.addDependent(c);
 }
-void start(){c.start();}
+public void start(){c.start();}
 void stop(){c.pause(true);}
 void addEvent(String code2, String code3, String code4, String code5){
 	MetroEvent em=new MetroEvent();
 	em.name=code2;
-	em.playerEvent=code3;
+	//em.playerEvent=code3;
 	em.probability= Float.parseFloat(code5)/(float)100.0;
 	Pattern p;
 	Matcher m;
@@ -121,12 +127,16 @@ void addEvent(String code2, String code3, String code4, String code5){
 metroEvents.put(em.name, em);
 	
 }
-void addSong(Song S){
-	SongMap.put(S.name, S);
+public void addSong(Song S){
+	songList.add(S);
+	S.offset=(int) c.getCount();
+	S.Metronom=this;
+	if (!c.isPaused())
+	S.update(S.offset, tempo);
 //	System.out.println("My name is " + name + " . My Songs Are:");
 //	 printAllSongs();
 }
-void printAllSongs(){for (String key:SongMap.keySet()) System.out.print (key+" son of "+ SongMap.get(key).getMother()+","); System.out.println("");}
+void printAllSongs(){for (Song S:songList) System.out.print (S.name+" son of "+ S.getMother()+","); System.out.println("");}
 void setNewTempo(float tempo){
 	offSetBeat+=currentBeat;
 	offSetTime+=currentTime;

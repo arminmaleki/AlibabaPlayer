@@ -1,5 +1,5 @@
 package alibaba;
 
 public interface CodeEvent {
-	public void run(Player p,String mother);
+	public void run(History h);
 }

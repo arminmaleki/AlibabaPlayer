@@ -213,6 +213,7 @@ public class Player {
 			songHistory.put(Code[1], s.MotherEvent);
 			System.out.println("s . Mother Event: "+s.MotherEvent);
 			songMap.put(s.getName(), s);
+			
 			Gtree.g.addVertex(Code[1]);
 			 System.out.println("Vertex Count:"+ Gtree.g.getVertexCount());
 			 
@@ -374,7 +375,7 @@ public class Player {
 				for(String sss:deadlist) {
 					songMap.get(sss).ps.gIn.kill();
 					songMap.get(sss).ps.gOut.kill();
-					metroMap.get(songMap.get(sss).timerName).SongMap.remove(sss);
+					metroMap.get(songMap.get(sss).timerName).songList.remove(sss);
 					songMap.remove(sss);
 					
 					
@@ -535,9 +536,9 @@ public class Player {
 			// TODO Auto-generated method stub
 		String stat="";
 		for (String s1:metroMap.keySet()){
-			for (String s2:metroMap.get(s1).SongMap.keySet())
+			for (String s2:metroMap.get(s1).songList.keySet())
 			{
-				Song song=metroMap.get(s1).SongMap.get(s2);
+				Song song=metroMap.get(s1).songList.get(s2);
 				if (song.MotherEvent.split("#")[0].equals(s)) stat+=song.timerName;
 			}
 			

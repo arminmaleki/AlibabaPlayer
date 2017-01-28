@@ -1,5 +1,7 @@
 package alibaba;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import alibaba.synth.Synth;
@@ -9,7 +11,7 @@ import net.beadsproject.beads.ugens.Gain;
 public class Song {
 	AudioContext ac;
 //	Gain MasterGain;
-	String name="";
+	public String name="";
 	note n;
 	Map<String, Synth> instMap;
 	Synth CurrentInstrument;
@@ -17,8 +19,10 @@ public class Song {
 	String MotherEvent="";
 	float maxTime=0;
 	float songTime=0;
+	Manager manager;
 	boolean INSTRUMENT_VARIABLE=false;
-	public Map<String,String> songEvents=new HashMap<String,String>();
+	public List<CodeEvent> songEvents=new ArrayList<CodeEvent>();
+	public void addManager(Manager manager){this.manager=manager;}
 	public void setScore(Score scr){
 		this.scr=scr;
 		for (note n:scr.noteList) {
@@ -37,8 +41,12 @@ public class Song {
 	 float pitchShift=0;
 	public String Mother;
 	public PlaySet ps;
+    public History history=new History();
+	public Metronom Metronom;
+	public Song(note n,Synth s,PlaySet ps){this("", new Score(n), s, ps);	}
+	public Song(float d){this(new note(d), null, null);}
 	public Song(String name,Score scr,Synth CurrentInstrument,PlaySet ps) {
-		super();
+		//super();
 		this.name = name;
 		this.CurrentInstrument=CurrentInstrument;
 		this.ps=ps;

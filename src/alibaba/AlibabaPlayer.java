@@ -156,6 +156,9 @@ public  static Glide vibGl=new Glide(ac, (float) 0.025, 30);;
 	    		//p.lastDefaultSongPs().newGlide("tone", toneGl);
 	    		p.lastDefaultSongPs().gOut.setGain(volumeGl);
 	    		p.start();*/
+	    		Scripter scr=new Scripter();
+	    		scr.run("test3.js");
+	    		/*
 	    		AudioContext ac= new AudioContext();
 	    		Synth inst=new Synth1("inst",ac, 0.01f,100f);
 	    		Score sc=new Score("alibaba", "alibaba.scr");
@@ -165,7 +168,7 @@ public  static Glide vibGl=new Glide(ac, (float) 0.025, 30);;
 	    		m.addSong(s);
 	    		ac.out.addInput(s.ps.gOut);
 	    		ac.start();
-	    		m.start();
+	    		m.start();*/
 				
 	    	}
 	    });

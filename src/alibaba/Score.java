@@ -16,6 +16,16 @@ boolean NO_INSTRUMENT=false;
 boolean SET_INSTRUMENT=false;
 String instrument="";
 public List<note> noteList= new ArrayList<note>();
+public Score(){};
+public Score addNote(note n){
+	if (noteList.isEmpty()) noteList.add(new note(n.inst,n.pitch,0,n.duration,n.modification));
+	else
+		noteList.add(new note(n.inst, n.pitch, noteList.get(noteList.size()-1).time+
+				noteList.get(noteList.size()-1).duration, n.duration, n.modification));
+return this;
+}
+public Score(List<note> nl){this.noteList=nl;};
+public Score(note n){addNote(n);}
 public Score(String name,String filename) {
 	super();
 	this.filename = filename;
