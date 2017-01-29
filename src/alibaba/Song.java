@@ -23,6 +23,7 @@ public class Song {
 	boolean INSTRUMENT_VARIABLE=false;
 	public List<CodeEvent> songEvents=new ArrayList<CodeEvent>();
 	public void addManager(Manager manager){this.manager=manager;}
+	public Song setPitch(float pitch){this.pitchShift=pitch; return this;}
 	public void setScore(Score scr){
 		this.scr=scr;
 		for (note n:scr.noteList) {
