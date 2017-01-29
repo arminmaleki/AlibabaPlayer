@@ -1,4 +1,9 @@
-
+(new EchoFilter).apply(master).set("echoGain",0.6);
+psBase=(new PlaySet(ac,0.2)).plugTo(master);
+(new EchoFilter).apply(psBase).set("echoGain",0.6);
+psPitch=(new PlaySet(ac,1.0)).plugTo(master);
+(new Distortion).apply(psPitch).set("cutoff",1500);
+//master.set("echoGain",0.6)
 var inst=new Synth1("inst",ac,0.1,100.0);
 var sc=newScore({NAME:"alibaba",FILE:"alibaba.scr"});
 var m=newMetro({TEMPO:180});
@@ -13,7 +18,7 @@ newEvent("loop_single",function ($) {
 );
 ////////////////
 newEvent("loop_single2",function ($) {
-  newSong($,{SILENCE:1,METRO:m2}).OnEnd("loop_single2").Percent(15).OnEnd("pitchnoise");
+  newSong($,{SILENCE:1,METRO:m2}).OnEnd("loop_single2").Percent(15).OnEnd("pitchnoiseinit");
   /*newSong($,
     {NOTE: newNote({PITCH:10,DURATION:2})
   ,METRO:m2});*/
@@ -28,21 +33,26 @@ newEvent("loop_single2",function ($) {
 newEvent("base_2",function ($) {
   newSong($,
     {NOTE: newNote({PITCH:-14,DURATION:8})
-  ,METRO:m});
+  ,METRO:m,PLAYSET:psBase});
 }
 );
 /////////////
 newEvent("base_3",function ($) {
   newSong($,
     {NOTE: newNote({PITCH:-10,DURATION:8})
-  ,METRO:m});
+  ,METRO:m,PLAYSET:psBase});
 }
 );
 ////////
+newEvent("pitchnoiseinit",function($){
+  events.pitchnoise($);
+  psPitch.set("volume",rnd(.5));
+});
+///////
 newEvent("pitchnoise",function ($) {
   newSong($,
-    {NOTE: newNote({PITCH:10.0+Math.random()*6,DURATION:0.25})
-  ,METRO:m2}).Percent(90).OnEnd("pitchnoise");
+    {NOTE: newNote({PITCH:10.0+rnd(6),DURATION:0.25})
+  ,METRO:m2,PLAYSET:psPitch}).Percent(90).OnEnd("pitchnoise");
 }
 );
 

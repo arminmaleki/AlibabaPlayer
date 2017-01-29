@@ -5,6 +5,8 @@ var Metronom=Java.type('alibaba.Metronom');
 var PlaySet=Java.type('alibaba.PlaySet');
 var History=Java.type('alibaba.History');
 var Note=Java.type('alibaba.note');
+var EchoFilter=Java.type('alibaba.filters.Echo');
+var Distortion=Java.type('alibaba.filters.Distortion');
 var events={};
 
 function merge(o1,o2){
@@ -77,6 +79,7 @@ function newEvent(s,f){
 	newhist.lastEventName=s;
 	f(newhist);};
 }
+var rnd=function(max){return Math.random()*max;}
 //the variable through which song and event graph information is pass
 //ed.can be used as $.lastEventName and $.lastSong. outside of an event,$.lastSong.history.lastEvent
 //"lastEventname" is the previous event. inside,its the current event.

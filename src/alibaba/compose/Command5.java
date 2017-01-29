@@ -1,9 +1,9 @@
 package alibaba.compose;
 
 import alibaba.CodeEvent;
-import alibaba.Filter;
 import alibaba.PlaySet;
 import alibaba.Player;
+import alibaba.filters.Filter;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.ugens.Envelope;
 import net.beadsproject.beads.ugens.Gain;

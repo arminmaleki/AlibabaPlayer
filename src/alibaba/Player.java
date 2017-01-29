@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 
 import org.apache.commons.collections15.Transformer;
 
+import alibaba.filters.Filter;
 import alibaba.synth.Sampler;
 import alibaba.synth.Synth;
 import alibaba.synth.Synth1;

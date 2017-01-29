@@ -1,10 +1,10 @@
 package alibaba.compose;
 
 import alibaba.CodeEvent;
-import alibaba.Filter;
-import alibaba.Filters;
+
 import alibaba.PlaySet;
 import alibaba.Player;
+import alibaba.filters.Filter;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.ugens.Gain;
 import net.beadsproject.beads.ugens.LPRezFilter;
@@ -13,7 +13,7 @@ import net.beadsproject.beads.ugens.TapOut;
 import net.beadsproject.beads.ugens.WaveShaper;
 
 public class shsho9 {
-
+   
 	public static void play(Player p, PlaySet ps) {
 		////Filters
 		Filter lowpass=new Filter(){public void applyToPlaySet(AudioContext ac,PlaySet ps){
