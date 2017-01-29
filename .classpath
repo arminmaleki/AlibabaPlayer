@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/collections-generic-4.01.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/colt-1.2.0.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/concurrent-1.3.4.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/j3d-core-1.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-3d-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-3d-demos-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-jai-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-jai-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/jung-visualization-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/samples.zip"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/vecmath-1.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/jung2-2_0_1/wstx-asl-3.2.6.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/beads.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/beads-io.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/jarjar-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/jna.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/mp3spi1.9.4.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/org-jaudiolibs-audioservers.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/org-jaudiolibs-audioservers-jack.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/org-jaudiolibs-audioservers-javasound.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/org-jaudiolibs-jnajack.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/tools.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/tritonus_aos-0.3.6.jar"/>
+	<classpathentry kind="lib" path="/home/armin/workspace/beads/library/tritonus_share.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
